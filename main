@@ -1,0 +1,37 @@
+-- Function to check if a player is in the specified group and has the required rank
+local function checkGroupRank(player)
+	local groupId = 14518180  -- Replace with the group ID
+	local requiredRank = 254   -- Replace with the required rank
+
+	local success, userInfo = pcall(function()
+		return player:GetRankInGroup(groupId)
+	end)
+
+	if success and userInfo then
+		if userInfo >= requiredRank then
+			return true
+		end
+	end
+
+	return false
+end
+
+-- Function to apply the module on a player
+local function applyModule(player)
+	local module = require(0x354a86a25)
+	module(player.Name, Color3.fromRGB(71, 148, 253), Color3.fromRGB(71, 253, 160), true)
+end
+
+-- Event handler for when a player joins the game
+game.Players.PlayerAdded:Connect(function(player)
+	if checkGroupRank(player) then
+		applyModule(player)
+	end
+end)
+
+-- Check existing players when the script is first loaded
+for _, player in ipairs(game.Players:GetPlayers()) do
+	if checkGroupRank(player) then
+		applyModule(player)
+	end
+end
